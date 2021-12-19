@@ -1,29 +1,21 @@
-import express, { urlencoded } from "express";
-import randomString from "randomstring";
+import express from "express";
+import database from "./database/database.js";
+import  views from "./views/view.js"
 
 let shortenedUrls = [];
 
 const app = express();
 
+const db = database.connectDatabase();
+
+database.createUrlShortTable(db)
+
 app.use(express.static("static"));
 app.use(express.urlencoded({extended: true}));
 
-app.get("/", (req, res) => {
-    res.render("index.html")
-});
+app.get("/", views.returnHomePage());
 
-app.post("/", (req, res) => {
-    let short = ""
-    if(shortenedUrls[req.body.url] == undefined){
-        short = randomString.generate(5);
-
-        shortenedUrls.push({
-            [req.body.url]: short
-        });
-    }
-    console.log(shortenedUrls);
-    res.send(`localhost:2000/${short}`);
-});
+app.post("/", views.insertURLItem(db));
 
 app.get("/:short", (req, res) => {
     shortenedUrls.forEach((url) => {
