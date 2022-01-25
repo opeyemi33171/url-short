@@ -1,0 +1,36 @@
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+    }
+  }
+
+  required_version = ">= 0.14.9"
+}
+
+provider "aws" {
+  region                  = "us-east-1"
+  profile                 = "default"
+  shared_credentials_file = "~/.aws/credentials"
+}
+
+resource "aws_dynamodb_table" "url-shorts" {
+  name     = "url-shorts"
+  hash_key = "id"
+
+  attributes = [
+    {
+      name = "id"
+      type = "N"
+    },
+    {
+      name = "url"
+      type = "S"
+    },
+
+    {
+      name = "short"
+      type = "S"
+    }
+  ]
+}

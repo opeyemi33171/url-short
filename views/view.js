@@ -1,12 +1,14 @@
 import randomString from "randomstring";
 
-function returnHomePage() {
+let shortenedUrls = [];
+
+export function returnHomePage() {
     return (req, res) => {
         res.render("index.html");
     };
 }
 
-function insertUrlItem(db){
+export function insertUrlItem(db){
     const insertUrl = `INSERT INTO shorts(url, short) VALUES(?,?)`;
     return (req, res) => {
 
@@ -15,7 +17,7 @@ function insertUrlItem(db){
         if (shortenedUrls[req.body.url] == undefined) {
             short = randomString.generate(5);
             
-            db.run(insertUrl, )
+            db.run(insertUrl,[req.body.url], short)
 
             shortenedUrls.push({
                 [req.body.url]: short
@@ -26,4 +28,16 @@ function insertUrlItem(db){
     };
 }
 
-export default {returnHomePage, insertURLItem: insertUrlItem};
+export function redirectToUrl() {
+    return (req, res) => {
+        shortenedUrls.forEach((url) => {
+            if (Object.values(url).includes(req.params.short)) {
+                res.redirect(Object.keys(url)[0]);
+            }
+        });
+
+        console.log("short doesn't exist")
+        res.send("short doesn't exist");
+    };
+}
+
