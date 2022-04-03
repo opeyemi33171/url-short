@@ -29,15 +29,20 @@ export function insertUrlItem(db){
 }
 
 export function redirectToUrl() {
+    let urlToRedirectTo = "";
     return (req, res) => {
         shortenedUrls.forEach((url) => {
             if (Object.values(url).includes(req.params.short)) {
-                res.redirect(Object.keys(url)[0]);
+                urlToRedirectTo =  Object.keys(url)[0];
             }
         });
 
-        console.log("short doesn't exist")
-        res.send("short doesn't exist");
+        if(urlToRedirectTo === ""){
+            console.log("short doesn't exist")
+            res.send("short doesn't exist");
+        }
+
+        res.redirect(urlToRedirectTo);    
     };
 }
 

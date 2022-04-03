@@ -1,19 +1,22 @@
 import express from "express";
-import { database} from "./database/database.js";
-import  { views }  from "./views/view.js"
+import {connectDatabase, createUrlShortTable} from "./models/database.js";
+import  { returnHomePage, insertUrlItem, redirectToUrl }  from "./controllers/view.js"
+import aws from "@aws-sdk/client-dynamodb";
 
 const app = express();
 
-const db = database.connectDatabase();
+const dbClient = new aws.DynamoDBClient()
 
-database.createUrlShortTable(db)
+const db = connectDatabase();
 
-app.use(express.static("static"));
+createUrlShortTable(db)
+
+app.use(express.static("views"));
 app.use(express.urlencoded({extended: true}));
 
-app.get("/", views.returnHomePage());
-app.post("/", views.insertURLItem(db));
-app.get("/:short", views.redirectToUrl());
+app.get("/", returnHomePage());
+app.post("/", insertUrlItem(db));
+app.get("/:short", redirectToUrl());
 
 app.listen(2000, () => {
     console.log('Listen at port: 2000');

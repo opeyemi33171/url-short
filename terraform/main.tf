@@ -16,21 +16,5 @@ provider "aws" {
 
 resource "aws_dynamodb_table" "url-shorts" {
   name     = "url-shorts"
-  hash_key = "id"
-
-  attributes = [
-    {
-      name = "id"
-      type = "N"
-    },
-    {
-      name = "url"
-      type = "S"
-    },
-
-    {
-      name = "short"
-      type = "S"
-    }
-  ]
+  billing_mode = "PAY_PER_REQUEST"
 }

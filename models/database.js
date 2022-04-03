@@ -10,13 +10,13 @@ export function connectDatabase() {
     });
 }
 export function createUrlShortTable (db) {
-    const createTableQuery = `CREATE TABLE shorts (id INT AUTO_INCREMENT,
+    const createTableQuery = `CREATE TABLE IF NOT EXISTS shorts (id INT AUTO_INCREMENT,
         url VARCHAR(255), short VARCHAR(255), PRIMARY KEY(id));
       )`
 
     db.run(createTableQuery, (err) => {
         if(err){
-            throw new Error(`error creating shorts table: ${err.message}`);ßs
+            throw new Error(`error creating shorts table: ${err.message}`);
         }
 
         console.log("created url shorts table");
