@@ -9,21 +9,24 @@ export function returnHomePage() {
 }
 
 export function insertUrlItem(db){
-    const insertUrl = `INSERT INTO shorts(url, short) VALUES(?,?)`;
+    
     return (req, res) => {
+        const short = randomString.generate(5);
+        const putParams = {
+            TableName: "url-shorts",
+            Item: {
+                short: req.body.url,
+                url: short,
+                id: 3
+            }
+        };
+        console.log({
+            [req.body.url]: short
+        });
 
-        //TODO remove code below and add db insert sql query code above.
-        let short = "";
-        if (shortenedUrls[req.body.url] == undefined) {
-            short = randomString.generate(5);
-            
-            db.run(insertUrl,[req.body.url], short)
-
-            shortenedUrls.push({
-                [req.body.url]: short
-            });
-        }
-        console.log(shortenedUrls);
+       db.put(putParams, (err, data) => {
+           console.log(`error: ${err}`);
+       })
         res.send(`localhost:2000/${short}`);
     };
 }
