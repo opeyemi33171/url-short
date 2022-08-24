@@ -9,7 +9,6 @@ export function returnHomePage() {
 }
 
 export function insertUrlItem(db){
-    
     return (req, res) => {
         const short = randomString.generate(5);
         const putParams = {
