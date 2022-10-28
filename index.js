@@ -14,7 +14,7 @@ const urlShortner = new UrlShortner(dbClient, shortnedUrlLength);
 
 app.get("/", urlShortner.renderHomePage());
 app.post("/", await urlShortner.insertUrlItem());
-//app.get("/:short", urlShortner.redirectToUrl());
+app.get("/:short", await urlShortner.redirectToUrl());
 
 app.listen(2000, () => {
     console.log('Listen at port: 2000');

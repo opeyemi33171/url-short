@@ -10,7 +10,7 @@ export class UrlShortner {
 
     renderHomePage() {
         return (req, res) => {
-            res.render("index.html")
+            res.render("index.html");
         };
     }
 
@@ -52,19 +52,19 @@ export class UrlShortner {
         return randomString.generate(length);
     }
 
-    async retrieveUrlItem(db, short) {
+    async retrieveUrlItem(short) {
         let requestedUrlItem;
         const params = {
             TableName: "url-shorts",
             Key: {
-                id: {
+                url: {
                     S: short
                 }
             }
         };
 
         try{
-            requestedUrlItem = this.db.send(new GetItemCommand(params));
+            requestedUrlItem = this.dbClient.send(new GetItemCommand(params));
         }
         catch(err){
             throw new Error(`error getting url from db: ${err}`);
@@ -74,21 +74,29 @@ export class UrlShortner {
     }
 
 
-    redirectToUrl() {
-        let urlToRedirectTo = "";
-        return (req, res) => {
-            shortenedUrls.forEach((url) => {
-                if (Object.values(url).includes(req.params.short)) {
-                    urlToRedirectTo =  Object.keys(url)[0];
-                }
-            });
-
-            if(urlToRedirectTo === ""){
-                console.log("short doesn't exist")
-                res.send("short  't exist");
-            }else {
-                res.redirect(urlToRedirectTo);    
-            }
+    async redirectToUrl() {
+        return async(req, res) => {
+            const short = req.params.short;
+            const urlToUser = await this.retrieveUrlItem(short);
+            console.log(urlToUser.TableName);
         }
+
+
+        // let urlToRedirectTo = "";
+        // return (req, res) => {
+        //     shortenedUrls.forEach((url) => {
+        //         const short = req.params.short;
+        //         if (Object.values(url).includes(short)) {
+        //             urlToRedirectTo =  Object.keys(url)[0];
+        //         }
+        //     });
+
+        //     if(urlToRedirectTo === ""){
+        //         console.log("short doesn't exist")
+        //         res.send("short  't exist");
+        //     }else {
+        //         res.redirect(urlToRedirectTo);    
+        //     }
+        // }
     }
 }
