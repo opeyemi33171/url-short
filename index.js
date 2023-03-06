@@ -11,10 +11,10 @@ const dbClient = new DynamoDBClient({region: "us-east-1"});
 const shortnedUrlLength = 5;
 const urlShortner = new UrlShortner(dbClient, shortnedUrlLength);
 
-
 app.get("/", urlShortner.renderHomePage());
 app.post("/", await urlShortner.insertUrlItem());
-app.get("/:short", await urlShortner.redirectToUrl());
+
+app.get("/[A_Za-z0-9]*/", await urlShortner.redirectToUrl());
 
 app.listen(2000, () => {
     console.log('Listen at port: 2000');
