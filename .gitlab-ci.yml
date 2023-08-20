@@ -1,6 +1,9 @@
 stages:
   - "test"
 
-"Test job":
+"Test":
+rules:
+ - if: '$CI_COMMIT_BRANCH == "master"'
 stage: "test"
-script: echo hello world  
+script:
+  - echo hello world  

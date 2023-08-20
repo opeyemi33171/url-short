@@ -1,6 +1,7 @@
 import  randomString from "randomstring";
 import { v1 as uuidv1 } from "uuid";
 import { GetItemCommand, PutItemCommand,} from "@aws-sdk/client-dynamodb";
+import { render } from "ejs";
 
 export class UrlShortner {
     constructor(dbClient, urlShortLength){
@@ -77,8 +78,13 @@ export class UrlShortner {
     async redirectToUrl() {
         return async(req, res) => {
             const short = req.params.short;
-            const urlToUser = await this.retrieveUrlItem(short);
-            console.log(urlToUser.TableName);
+            try{
+
+                const urlToUser = await this.retrieveUrlItem(short);
+                console.log(urlToUser.TableName);
+            }catch(err){
+                console.log(`short was not found: ${err}`);
+            }
         }
 
 
@@ -98,5 +104,16 @@ export class UrlShortner {
         //         res.redirect(urlToRedirectTo);    
         //     }
         // }
+    }
+
+    renderUrlPage(){
+        return (req, res) => {
+            res.render("short-page", {
+                shorts: [{
+                    url: "gx2jk",
+                    short: "example.com"
+                }]
+            })
+        }
     }
 }

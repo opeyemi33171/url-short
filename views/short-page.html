@@ -1,0 +1,22 @@
+<html> 
+    <head>
+        <title>Url Short</title>
+    </head>
+
+    <body>
+        <h1> Url Page </h1>
+        <!-- TODO: finish off list templates for shorts and their url-->
+        <div>
+            <ul>
+                <% shorts.forEach((short) => { %>
+                    <li><a><% short.short %></a> - <% short.url %></li>
+                <% }); %>
+            </ul>
+        </div>
+        <br></br>
+
+        <form method="GET" action="/urls">
+            <button>Go Url Page</button>
+        </form>
+    </body>
+</html>
